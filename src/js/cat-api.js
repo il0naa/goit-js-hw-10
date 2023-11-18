@@ -2,45 +2,21 @@ import axios from 'axios';
 
 axios.defaults.headers.common['x-api-key'] =
   'live_KZNqPaZLIqp6ZlhsPgRMapnL4XgHVPp9ogre63NkeXfVrj13nob00xbvpsdPBwU7';
-
-const BASE_URL = 'https://api.thecatapi.com/v1';
-
-export function fetchBreeds() {
+  
+  const baseURL = 'https://api.thecatapi.com/v1';
   const END_POINT = '/breeds';
-  const PARAMS = new URLSearchParams('');
-  const url = `${BASE_URL}${END_POINT}${PARAMS}`;
+  const END_POINT_ID = '/images/search?';
 
-  return axios
-    .get(url)
-    .then(response => {
-      if (response.status === 200) return response;
-      return Promise.reject(response.status);
-    })
-    .catch(error => {
-      errorFn(error);
-    })
-    .finally(() => {
-      // Припускаючи, що loadOn - це функція, яку ви хочете викликати після завершення запиту
-      loadOn();
+
+  export function fetchBreeds() {
+    return axios.get(baseURL + END_POINT).then(res => res.data);
+  }
+  
+  export function fetchCatByBreed(breedId) {
+    const PARAMS = new URLSearchParams({
+      breed_ids: breedId,
     });
-}
-
-export function fetchCatByBreed(breedId) {
-  const END_POINT = '/images/search';
-  const PARAMS = new URLSearchParams({ breed_ids: breedId });
-  const url = `${BASE_URL}${END_POINT}?${PARAMS}`;
-
-  return axios
-    .get(url)
-    .then(response => {
-      if (response.status === 200) return response;
-      return Promise.reject(response.status);
-    })
-    .catch(error => {
-      errorFn(error);
-    })
-    .finally(() => {
-      // Припускаючи, що loadOn - це функція, яку ви хочете викликати після завершення запиту
-      loadOn();
-    });
-}
+    const url = END_POINT_ID + PARAMS;
+    return axios.get(url).then(res => res.data);
+  }
+  
